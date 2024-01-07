@@ -16,10 +16,5 @@ MoviePy
 NumPy
 Matplotlib
 
-# Configuration
-You can configure the sensitivity of motion detection and the length of each segment in the script settings.
-Contributing
-Contributions to the Motion Detection Video Editor are welcome. Please fork the repository and submit a pull request with your features or improvements.
-
 # Acknowledgements
 Thanks to the developers of OpenCV and MoviePy for their fantastic libraries.
