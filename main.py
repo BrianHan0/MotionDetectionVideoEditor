@@ -1,14 +1,21 @@
-from src.MotionDetection import motion_detector
-from src.MotionGraph import GraphMotionPlot
-from src.MotionGraph import plot_combined_motion_graph
-videos = ["VideoSamples/production_id_4913621 (2160p).mp4","VideoSamples/video.mp4"]
-motion_levels = []
-video_boundaries = [0]  # Starting index of each video in the combined motion levels list
+from src.MotionProcessing.MotionDetection import motion_detector
+from src.MotionProcessing.MotionGraph import plot_combined_motion_graph
+from src.VideoEditing.VideoCutting import find_high_motion_segments, cut_videos_at_segments, create_final_video
 
-for i in videos:
-    motion = motion_detector(i)
-    motion_levels.extend(motion)
-    video_boundaries.append(len(motion_levels))
+def calculate_segment_duration(desired_total_duration, num_segments):
+    if num_segments == 0:
+        return 0
+    return desired_total_duration / num_segments
 
-plot_combined_motion_graph(motion_levels, video_boundaries)
+videos = ["SampleVideos/video1.mp4","SampleVideos/video2.mp4","SampleVideos/video3.mp4","SampleVideos/video4.mp4","SampleVideos/video5.mp4","SampleVideos/video6.mp4","SampleVideos/video7.mp4","SampleVideos/video8.mp4"]
+desired_total_duration = 6  # Desired total duration in seconds
+motion,video = motion_detector(videos,True)
+plot_combined_motion_graph(motion,video)
+threshold = 1000  # Set a threshold for motion level
+high_motion_segments = find_high_motion_segments(motion, video, threshold)
+
+segment_duration = calculate_segment_duration(desired_total_duration, len(high_motion_segments))
+clip_filenames = cut_videos_at_segments(videos, high_motion_segments, segment_duration)
+create_final_video(clip_filenames)
+
 
